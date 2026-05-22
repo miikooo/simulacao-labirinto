@@ -1,0 +1,46 @@
+log: colocado mais aleatoriedade nos movimentos, também foi expandido
+o mapa.
+utilização da biblioteca random
+
+obs: como eu faço o ersonagem ser menos fixo nas posições "spawnadas"?
+existe uma forma de diminuir a trabalheira ali do meio
+talvez adicionar classe obstaculos "carros", que fazem o jogador ter que aguardar para prosseguir
+
+logs: mapa tem metodo de fornecer posição incial livre
+criar um jogador com logica diferente, talvez semre indo pra uma direção ou velocidade, utilizar dos métodos
+na simulação utilizar uma lista de jogadores, não somente dois fixos
+adicionar um jogador que consegue andar na diagonal, que analisa 8 possibilidades
+*como escapar de labirintos
+
+*gerar mapas maiores, com ascii ou pedir para ia baseado no meu código
+*em quanto tempo a sala fica vazia em qual local do destino é mais favoravel em menor tempo
+*classes @override
+
+   #verifica se a nova posição é válida e se não é um prédio
+           /* if 0 <= nl < mapa.linhas and 0 <= nc < mapa.colunas and mapa.get(nl, nc) != 1:
+                dist_nova = abs(nl - self.dest_l) + abs(nc - self.dest_c)
+                
+                if dist_nova < dist_atual: #mudar logica , nem sempre a melhor pçã #detectar se ele se prendeu ele volta para posição inicial *oq ele faz se ja nascer no labirinto 
+                    melhor_pos = (nl, nc) #exapandir o pensamento, talvez seja melhor ir para um lugar que não seja o mais próximo, mas que tenha um caminho melhor depois
+                    break #fazer uma lista quie no final ele escolhe a melhor rota
+
+        if melhor_pos != (self.l, self.c):
+            self.l, self.c = melhor_pos
+            self._aplicar_custo(mapa.get(self.l, self.c))
+ 
+        if self.l == self.dest_l and self.c == self.dest_c:
+            self.venceu = True
+
+
+
+
+
+
+
+            #trabalhar com herança nos jogadores, para que eles herdem do jogador padrão, mas que tenha suas diferenças
+
+
+            #salvar o nome do tipo do mapa, testar em outro computador, testes com os jogadores nascendo no mesmo lugar, executar esse teste 3 vezes pelo menos para vosualizar a diferença
+
+
+#classe resultado para armazenar resultados, organiza o código, atualizar diagrama de classe
