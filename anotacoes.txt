@@ -44,3 +44,6 @@ adicionar um jogador que consegue andar na diagonal, que analisa 8 possibilidade
 
 
 #classe resultado para armazenar resultados, organiza o código, atualizar diagrama de classe
+
+
+#encontrar o bug e começar a trabalhar no vídeo ou roteiro do vídeo
