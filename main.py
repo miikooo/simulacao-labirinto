@@ -17,15 +17,15 @@ pygame.init()
 
 LARGURA, ALTURA = 1600, 950 
 TELA = pygame.display.set_mode((LARGURA, ALTURA)) 
-pygame.display.set_caption("corrida até o if")
+pygame.display.set_caption("Corrida até o IFC")
 FONTE = pygame.font.SysFont("Arial", 20)
 FONTE_PEQUENA = pygame.font.SysFont("Consolas", 16)
 
 OVERLAY_SCANLINE = pygame.Surface((LARGURA, ALTURA), pygame.SRCALPHA)
-OVERLAY_SCANLINE.fill((0, 0, 0, 0)) # Fundo totalmente transparente
+OVERLAY_SCANLINE.fill((0, 0, 0, 0)) #fundo totalmente transparente
 
-# Desenha as linhas horizontais
-# O passo '3' define o espaçamento. O valor '40' define a opacidade (0-255).
+#desenha as linhas horizontais
+#o passo '3' define o espaçamento. O valor '40' define a opacidade (0-255).
 for y in range(0, ALTURA, 3):
     pygame.draw.line(OVERLAY_SCANLINE, (0, 0, 0, 40), (0, y), (LARGURA, y), 1)
 
@@ -121,18 +121,18 @@ def desenhar():
     tam_j = TAM_CELULA - (margem * 2)
 
     for j in jogadores:
-        # 1. Desenha o quadrado do jogador
+        #desenha o quadrado do jogador
         x_jogador = j.c * TAM_CELULA + margem
         y_jogador = j.l * TAM_CELULA + margem
         pygame.draw.rect(TELA, j.cor, (x_jogador, y_jogador, tam_j, tam_j))
         
-        # 2. Pega a primeira letra do nome (ex: 'N' para normal, 'E' para esquerda)
+        #pega a primeira letra do nome (ex: 'N' para normal, 'E' para esquerda)
         letra = j.nome[0].upper()
         
-        # 3. Renderiza a letra com uma cor bem escura para dar leitura
+        #renderiza a letra com uma cor bem escura para dar leitura
         texto_letra = FONTE_PEQUENA.render(letra, True, (30, 30, 30))
         
-        # 4. Calcula a posição para a letra ficar perfeitamente centralizada no quadrado
+        #calcula a posição para a letra ficar perfeitamente centralizada no quadrado
         letra_x = x_jogador + (tam_j // 2) - (texto_letra.get_width() // 2)
         letra_y = y_jogador + (tam_j // 2) - (texto_letra.get_height() // 2)
         
@@ -151,13 +151,19 @@ def desenhar():
     )
     TELA.blit(instrucao, (LARGURA // 2 - instrucao.get_width() // 2, base + 5))
 
-    # --- ARQUITETURA DO PAINEL EM 3 COLUNAS VISUAIS (Abaixo da linha divisória) ---
-    y_paineis = base + 35
+    #mostra a velocidade atual (menor delay = mais rápido) pra dar retorno visual ao calibrar com +/-
+    texto_velocidade = FONTE_PEQUENA.render(
+        f"[+/-] Velocidade: {tempo_delay} ms",
+        True, (100, 90, 60)
+    )
+    TELA.blit(texto_velocidade, (LARGURA // 2 - texto_velocidade.get_width() // 2, base + 30))
 
-    # Divisória Vertical 1 (Separa Corrida Atual do Histórico)
+    y_paineis = base + 55  # empurrado pra baixo pra abrir espaço pro indicador de velocidade
+
+    #divisória vertical 1 (Separa Corrida Atual do Histórico)
     pygame.draw.line(TELA, (150, 150, 150), (420, y_paineis), (420, ALTURA - 10), 1)
     
-    # Divisória Vertical 2 (Separa Histórico do Teste de Hipótese)
+    #divisória vertical 2 (Separa Histórico do Teste de Hipótese)
     pygame.draw.line(TELA, (150, 150, 150), (980, y_paineis), (980, ALTURA - 10), 1)
 
     # ================= COLUNA 1: CORRIDA ATUAL =================
@@ -172,7 +178,7 @@ def desenhar():
         texto = FONTE_PEQUENA.render(f" {j.nome.upper()}: {status} ", True, (255, 255, 255))
         TELA.blit(texto, (25, y_paineis + 28 + i * 28))
 
-    # ================= LADO DIREITO (Histórico disponível após fim da prova) =================
+    # ================= LADO DIREITO e histórico disponível após fim da prova =================
     if all(j.venceu for j in jogadores):
         historico, estatisticas = buscar_resultados(indice_mapa)
         
@@ -180,7 +186,7 @@ def desenhar():
             global botoes_historico, indice_rodada_selecionada
             botoes_historico.clear() # limpa os botões antigos a cada frame desenhado
             
-            # Se não tiver nenhuma aba selecionada, foca na mais recente
+            #se não tiver nenhuma aba selecionada, foca na mais recente
             if indice_rodada_selecionada is None or indice_rodada_selecionada >= len(historico):
                 indice_rodada_selecionada = len(historico) - 1
                 
@@ -193,7 +199,7 @@ def desenhar():
             
             # desenha as caixinhas/abas lado a lado
             for i, group in enumerate(historico):
-                texto_btn = FONTE_PEQUENA.render(group['titulo'], True, (255, 255, 255))
+                texto_btn = FONTE_PEQUENA.render(f"R{i + 1}", True, (255, 255, 255))
                 largura_btn = texto_btn.get_width() + 16 # espaço interno do botão
                 
                 # se a caixinha for passar da linha divisória central, pula linha
@@ -212,7 +218,7 @@ def desenhar():
                 
                 x_btn += largura_btn + 8 # avança o X para a próxima caixinha
             
-            # Resultados específicos da rodada clicada posicionados logo abaixo das abas
+            #resultados específicos da rodada clicada posicionados logo abaixo das abas
             y_resultados = y_btn + 35
             grupo_sel = historico[indice_rodada_selecionada]
             
@@ -304,10 +310,12 @@ def trocar_mapa(novo_indice):
     TAM_CELULA = min(LARGURA // mapa.colunas, (ALTURA - 250) // mapa.linhas) #ajusta o tamanho da célula para caber o novo mapa
     jogadores = criar_jogadores(4, mapa, spawn_fixo)
 
-#inicia o contador na rodada 1
+# inicia o contador na rodada 1
 rodadas_mapa = 1
 
-#loop principal
+tempo_delay = 250
+
+# loop principal
 while True:
     desenhar()
 
@@ -317,9 +325,9 @@ while True:
             sys.exit()
 
         if e.type == pygame.MOUSEBUTTONDOWN:
-            #clique no botão de spawn faz o mesmo que pressionar S
-            if BOTAO_SPAWN.collidepoint(e.pos): #verifica se o clique foi dentro do retângulo do botão
-                spawn_fixo = not spawn_fixo #alterna o modo de spawn
+            # clique no botão de spawn faz o mesmo que pressionar S
+            if BOTAO_SPAWN.collidepoint(e.pos):
+                spawn_fixo = not spawn_fixo
                 reiniciar_mapa()
                 
             # verifica se clicou em alguma caixinha do histórico
@@ -329,31 +337,37 @@ while True:
                     break
 
         if e.type == pygame.KEYDOWN:
-            #navega para o próximo labirinto gerado no banco
+            # navega para o próximo labirinto gerado no banco
             if e.key == pygame.K_RIGHT:
                 trocar_mapa(indice_mapa + 1)
 
-            #navega para o labirinto anterior, não deixa ir abaixo de 0
+            # navega para o labirinto anterior, não deixa ir abaixo de 0
             elif e.key == pygame.K_LEFT:
                 trocar_mapa(max(0, indice_mapa - 1))
 
-            #reinicia a corrida no mesmo mapa (para rodar 3 vezes e comparar)
+            # reinicia a corrida no mesmo mapa (para rodar 3 vezes e comparar)
             elif e.key == pygame.K_r:
                 reiniciar_mapa()
 
-            #alterna entre spawn fixo e aleatório sem trocar de mapa
+            # alterna entre spawn fixo e aleatório sem trocar de mapa
             elif e.key == pygame.K_s:
                 spawn_fixo = not spawn_fixo
                 reiniciar_mapa()
+                
+            # ajusta a velocidade da simulação com + e -
+            elif e.key in (pygame.K_PLUS, pygame.K_KP_PLUS, pygame.K_EQUALS):
+                tempo_delay = max(0, tempo_delay - 50) 
+            elif e.key in (pygame.K_MINUS, pygame.K_KP_MINUS):
+                tempo_delay += 50 
 
     #move todos os jogadores que ainda não venceram
     for j in jogadores: 
         if not j.venceu:
             j.pensar_e_mover(mapa)
 
-    #quando todos terminarem e ainda não salvou, salva os resultados no banco
+#salva os resultados no banco de dados se todos venceram e ainda não foram salvos
     if all(j.venceu for j in jogadores) and not resultados_salvos:
         salvar_resultados(indice_mapa, jogadores, rodadas_mapa, spawn_fixo)
         resultados_salvos = True  #garante que só salva uma vez por partida
 
-    pygame.time.delay(265) #265
+    pygame.time.delay(tempo_delay)

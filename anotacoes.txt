@@ -47,3 +47,8 @@ adicionar um jogador que consegue andar na diagonal, que analisa 8 possibilidade
 
 
 #encontrar o bug e começar a trabalhar no vídeo ou roteiro do vídeo
+
+
+
+#calibrar a velocidade através da tecla + -
+#colocar apenas R1, R2 ao inves da descrição completa
